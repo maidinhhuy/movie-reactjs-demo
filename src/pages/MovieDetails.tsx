@@ -1,40 +1,47 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router';
 
-import api from './api'
+import api from '../api'
 import utils from './utils'
-import LazyImage from './components/LazyImage'
-import default_image from './assets/images/default-thumbnail.jpeg'
+import LazyImage from '../components/LazyImage'
+import default_image from '../assets/images/default-thumbnail.jpeg'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faStar} from '@fortawesome/free-solid-svg-icons'
 
-function MovieDetails(props: {}) {
+function MovieDetails() {
   const params = useParams()
-
-  const [movie, setMovie] = useState<any>({})
+  const [error, setError] = useState()
+  const [movie, setMovie] = useState<any>()
   const [year, setYear] = useState<number>()
 
   useEffect(() => {
+    // Get movie details by movie id
     if (params && params.id) {
       api.getMovieDetails(params.id, 'en-US')
         .then(result => {
-          setMovie(result)
-          setYear(new Date(Date.parse(movie.release_date)).getFullYear())
-        }).catch()
+          if (result) {
+            setMovie(result)
+            setYear(new Date(Date.parse(result.release_date)).getFullYear())
+          }
+        })
+        .catch(err => {
+          setError(err.messsage)
+        })
     }
-  })
+  }, [])
   if (movie) {
     return (
       <main>
         <article>
           <section className="movie-detail">
             <div className="container">
-              <figure className="movie-detail-banner">
-                {movie.poster_path &&
-                <LazyImage unloadedSrc={default_image} src={utils.getImageUrl(movie.poster_path, 500)}
-                           alt={movie.title}/>}
+              <figure className={`movie-detail-banner ${movie ? '' : 'skeleton'}`}>
+                <LazyImage
+                  unloadedSrc={default_image}
+                  src={utils.getImageUrl(movie.poster_path, 500)}
+                  alt={movie.title}/>
               </figure>
-              <div className="movie-detail-content">
+              <div className={`movie-detail-content ${movie ? '' : 'skeleton'}`}>
                 <p className="detail-subtitle">{movie.original_title}</p>
                 <div className="meta-wrapper">
                   <div className="badge-wrapper">
@@ -59,7 +66,7 @@ function MovieDetails(props: {}) {
                 </div>
                 <div className="rating">
                   <FontAwesomeIcon icon={faStar}/>
-                  <data>{Math.round(movie.vote_average * 100)/100}</data>
+                  <data>{Math.round(movie.vote_average * 100) / 100}</data>
                 </div>
                 <p className="storyline">
                   {movie.overview}

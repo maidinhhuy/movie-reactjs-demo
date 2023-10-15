@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import './app.scss';
-import TheaterMovies from './TheaterMovies'
-import Layout from './Layout'
-import MovieDetails from './MovieDetails'
+import './App.scss';
+import TheaterMovies from './pages/TheaterMovies'
+import Layout from './components/Layout'
+import MovieDetails from './pages/MovieDetails'
+import NetworkDetector from './NetworkDetector'
 
 function App() {
   return (
@@ -13,10 +14,11 @@ function App() {
         <Route path="/" element={<Layout/>}>
           <Route index element={<TheaterMovies/>}/>
           <Route path={'movie/:id'} element={<MovieDetails/>}/>
+          <Route path={'top-rated'} element={<TheaterMovies/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
   );
 }
 
-export default App;
+export default NetworkDetector(App);

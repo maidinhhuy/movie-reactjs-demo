@@ -12,6 +12,8 @@ export default {
     }).then(res => {
       if (res && res.ok) {
         return res.json()
+      } else {
+        throw new Error('Load movies failed')
       }
     })
   },
@@ -22,6 +24,8 @@ export default {
     }).then(res => {
       if (res && res.ok) {
         return res.json()
+      } else {
+        throw new Error('Load movie details failed')
       }
     })
   }

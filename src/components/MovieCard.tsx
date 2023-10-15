@@ -3,7 +3,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {Link} from 'react-router-dom'
 import {faStar} from '@fortawesome/free-solid-svg-icons'
 
-import utils from '../utils'
+import utils from '../pages/utils'
 import LazyImage from './LazyImage'
 import default_image from '../assets/images/default-thumbnail.jpeg'
 
